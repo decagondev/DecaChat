@@ -44,7 +44,7 @@ The `DecaChat` constructor accepts a configuration object with the following opt
 ```typescript
 interface DecaChatConfig {
   apiKey: string;      // Required: Your OpenAI API key
-  model?: string;      // Optional: Default 'gpt-3.5-turbo'
+  model?: string;      // Optional: Default 'gpt-4o-mini'
   baseUrl?: string;    // Optional: Default 'https://api.openai.com/v1'
   maxTokens?: number;  // Optional: Default 1000
   temperature?: number; // Optional: Default 0.7
