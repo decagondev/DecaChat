@@ -3,6 +3,7 @@ import { Configuration, OpenAIApi } from 'openai';
 interface DecaChatConfig {
   apiKey: string;
   model?: string;
+  baseUrl?: string;
   maxTokens?: number;
   temperature?: number;
 }
@@ -15,17 +16,20 @@ interface ChatMessage {
 export class DecaChat {
   private openai: OpenAIApi;
   private model: string;
+  private baseUrl?: string;
   private maxTokens: number;
   private temperature: number;
   private conversation: ChatMessage[];
 
   constructor(config: DecaChatConfig) {
     const configuration = new Configuration({
-      apiKey: config.apiKey
+      apiKey: config.apiKey,
+      basePath: config.baseUrl
     });
 
     this.openai = new OpenAIApi(configuration);
     this.model = config.model || 'gpt-3.5-turbo';
+    this.baseUrl = config.baseUrl || 'https://api.openai.com/v1';
     this.maxTokens = config.maxTokens || 1000;
     this.temperature = config.temperature || 0.7;
     this.conversation = [];

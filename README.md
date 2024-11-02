@@ -9,6 +9,9 @@ A lightweight and easy-to-use wrapper for OpenAI's Chat API. DecaChat provides a
 - 💾 Conversation management
 - ⚙️ Configurable parameters
 - 🛡️ Built-in error handling
+- 🌐 Custom base URL support
+- 🔄 Conversation history management
+- 🤖 System message configuration
 - 📦 Zero dependencies (except OpenAI SDK)
 
 ## Installation
@@ -42,6 +45,7 @@ The `DecaChat` constructor accepts a configuration object with the following opt
 interface DecaChatConfig {
   apiKey: string;      // Required: Your OpenAI API key
   model?: string;      // Optional: Default 'gpt-3.5-turbo'
+  baseUrl?: string;    // Optional: Default 'https://api.openai.com/v1'
   maxTokens?: number;  // Optional: Default 1000
   temperature?: number; // Optional: Default 0.7
 }
@@ -58,34 +62,36 @@ const chat = new DecaChat(config: DecaChatConfig);
 ### Methods
 
 #### `setSystemMessage(message: string): void`
-Sets the system message for the conversation.
+Sets the system message for the conversation. This resets the conversation history and starts with the new system message.
 
 ```typescript
 chat.setSystemMessage('You are a helpful assistant specialized in JavaScript.');
 ```
 
 #### `async chat(message: string): Promise<string>`
-Sends a message and returns the assistant's response.
+Sends a message and returns the assistant's response. The message and response are automatically added to the conversation history.
 
 ```typescript
 const response = await chat.chat('What is a closure in JavaScript?');
 ```
 
 #### `clearConversation(): void`
-Clears the conversation history.
+Clears the entire conversation history, including the system message.
 
 ```typescript
 chat.clearConversation();
 ```
 
 #### `getConversation(): ChatMessage[]`
-Returns the current conversation history.
+Returns the current conversation history, including system messages, user messages, and assistant responses.
 
 ```typescript
 const history = chat.getConversation();
 ```
 
 ## Example Usage
+
+### Basic Chat Application
 
 ```typescript
 import { DecaChat } from 'deca-chat';
@@ -120,6 +126,43 @@ async function example() {
 }
 ```
 
+### Custom API Endpoint
+
+```typescript
+const chat = new DecaChat({
+  apiKey: 'your-api-key',
+  baseUrl: 'https://your-custom-endpoint.com/v1',
+  model: 'gpt-4o-mini'
+});
+```
+
+### Managing Conversations
+
+```typescript
+// Start with a system message
+chat.setSystemMessage('You are a helpful assistant.');
+
+// Have a conversation
+await chat.chat('What is TypeScript?');
+await chat.chat('How does it differ from JavaScript?');
+
+// Get the conversation history
+const history = chat.getConversation();
+console.log(history);
+/* Output:
+[
+  { role: 'system', content: 'You are a helpful assistant.' },
+  { role: 'user', content: 'What is TypeScript?' },
+  { role: 'assistant', content: '...' },
+  { role: 'user', content: 'How does it differ from JavaScript?' },
+  { role: 'assistant', content: '...' }
+]
+*/
+
+// Clear the conversation and start fresh
+chat.clearConversation();
+```
+
 ## Error Handling
 
 The chat method throws errors when:
@@ -127,6 +170,8 @@ The chat method throws errors when:
 - The API request fails
 - Rate limits are exceeded
 - Network errors occur
+- Invalid model specified
+- Custom endpoint is unreachable
 
 Always wrap API calls in try-catch blocks for proper error handling:
 
@@ -139,9 +184,17 @@ try {
 }
 ```
 
+## Best Practices
+
+1. **System Messages**: Set appropriate system messages to guide the assistant's behavior
+2. **Conversation Management**: Clear conversations when starting new topics
+3. **Error Handling**: Always implement proper error handling
+4. **Resource Management**: Monitor token usage and conversation length
+5. **API Key Security**: Never expose your API key in client-side code
+
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 
