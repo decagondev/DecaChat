@@ -8,6 +8,7 @@ export interface DecaChatConfig {
   temperature?: number;
   intro?: string;
   systemMessage?: string;
+  useBrowser?: boolean;
 }
 
 export interface ChatMessage {
@@ -28,7 +29,8 @@ export class DecaChat {
   constructor(config: DecaChatConfig) {
     this.openai = new OpenAI({
       apiKey: config.apiKey,
-      baseURL: config.baseUrl
+      baseURL: config.baseUrl,
+      dangerouslyAllowBrowser: config.useBrowser
     });
 
     this.model = config.model || 'gpt-4o-mini';

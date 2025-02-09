@@ -51,6 +51,7 @@ interface DecaChatConfig {
   temperature?: number; // Optional: Default 0.7
   intro?: string;      // Optional: Custom introduction message
   systemMessage?: string; // Optional: Initial system message
+  useBrowser?: boolean;   // Optional: Enable browser usage (when API keys are secured)
 }
 ```
 
