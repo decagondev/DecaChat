@@ -50,6 +50,7 @@ interface DecaChatConfig {
   maxTokens?: number;  // Optional: Default 1000
   temperature?: number; // Optional: Default 0.7
   intro?: string;      // Optional: Custom introduction message
+  systemMessage?: string; // Optional: Initial system message
 }
 ```
 
@@ -106,17 +107,18 @@ const history = chat.getConversation();
 import { DecaChat } from 'deca-chat';
 
 async function example() {
-  // Initialize with custom configuration including intro
+  // Initialize with custom configuration including system message
   const chat = new DecaChat({
     apiKey: 'your-openai-api-key',
     model: 'gpt-4',
     maxTokens: 2000,
     temperature: 0.8,
-    intro: 'Hello! I'm your coding assistant. Ask me anything about programming!'
+    intro: 'Hello! I'm your coding assistant. Ask me anything about programming!',
+    systemMessage: 'You are a helpful coding assistant specialized in JavaScript.'
   });
 
-  // Or set the intro message after initialization
-  chat.setIntro('Hi there! Ready to help with your coding questions!');
+  // The system message can also be set after initialization
+  chat.setSystemMessage('You are now a Python expert.');
 
   // The intro message will be automatically sent when starting a conversation
   const response = await chat.chat('How do I create a React component?');

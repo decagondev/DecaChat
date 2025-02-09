@@ -1,6 +1,6 @@
 {
   "name": "deca-chat",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "description": "A simple wrapper for OpenAI's chat API - that includes ability to use custome baseURL's",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -7,6 +7,7 @@ export interface DecaChatConfig {
   maxTokens?: number;
   temperature?: number;
   intro?: string;
+  systemMessage?: string;
 }
 
 export interface ChatMessage {
@@ -38,6 +39,9 @@ export class DecaChat {
     
     if (config.intro) {
       this.introMessage = config.intro;
+    }
+    if (config.systemMessage) {
+      this.setSystemMessage(config.systemMessage);
     }
   }
 
