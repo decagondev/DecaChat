@@ -6,6 +6,7 @@ export interface DecaChatConfig {
   baseUrl?: string;
   maxTokens?: number;
   temperature?: number;
+  intro?: string;
 }
 
 export interface ChatMessage {
@@ -20,6 +21,7 @@ export class DecaChat {
   private maxTokens: number;
   private temperature: number;
   private conversation: ChatMessage[];
+  private introMessage?: string;
 
   constructor(config: DecaChatConfig) {
     const configuration = new Configuration({
@@ -33,6 +35,10 @@ export class DecaChat {
     this.maxTokens = config.maxTokens || 1000;
     this.temperature = config.temperature || 0.7;
     this.conversation = [];
+    
+    if (config.intro) {
+      this.introMessage = config.intro;
+    }
   }
 
   /**
@@ -44,11 +50,23 @@ export class DecaChat {
   }
 
   /**
+   * Set a custom introduction message
+   * @param message - The introduction message to be shown when starting a conversation
+   */
+  setIntro(message: string): void {
+    this.introMessage = message;
+  }
+
+  /**
    * Send a message and get a response
    * @param message - The user's message
    * @returns The assistant's response
    */
   async chat(message: string): Promise<string> {
+    if (this.introMessage && this.conversation.length === 0) {
+      this.conversation.push({ role: 'assistant', content: this.introMessage });
+    }
+
     this.conversation.push({ role: 'user', content: message });
 
     try {
@@ -80,13 +98,5 @@ export class DecaChat {
    */
   getConversation(): ChatMessage[] {
     return [...this.conversation];
-  }
-
-  /**
-   * Add an initial assistant message to be displayed as an intro
-   * @param message - The intro message to be displayed
-   */
-  intro(message: string): void {
-    this.conversation.push({ role: 'assistant', content: message });
   }
 }

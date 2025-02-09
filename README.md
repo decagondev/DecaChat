@@ -12,6 +12,7 @@ A lightweight and easy-to-use wrapper for OpenAI's Chat API. DecaChat provides a
 - 🌐 Custom base URL support
 - 🔄 Conversation history management
 - 🤖 System message configuration
+- 👋 Customizable introduction messages
 - 📦 Zero dependencies (except OpenAI SDK)
 
 ## Installation
@@ -48,6 +49,7 @@ interface DecaChatConfig {
   baseUrl?: string;    // Optional: Default 'https://api.openai.com/v1'
   maxTokens?: number;  // Optional: Default 1000
   temperature?: number; // Optional: Default 0.7
+  intro?: string;      // Optional: Custom introduction message
 }
 ```
 
@@ -66,6 +68,13 @@ Sets the system message for the conversation. This resets the conversation histo
 
 ```typescript
 chat.setSystemMessage('You are a helpful assistant specialized in JavaScript.');
+```
+
+#### `setIntro(message: string): void`
+Sets a custom introduction message that will be sent to the user when starting a new conversation.
+
+```typescript
+chat.setIntro('Hi! I'm your AI assistant. How can I help you today?');
 ```
 
 #### `async chat(message: string): Promise<string>`
@@ -97,32 +106,21 @@ const history = chat.getConversation();
 import { DecaChat } from 'deca-chat';
 
 async function example() {
-  // Initialize with custom configuration
+  // Initialize with custom configuration including intro
   const chat = new DecaChat({
     apiKey: 'your-openai-api-key',
     model: 'gpt-4',
     maxTokens: 2000,
-    temperature: 0.8
+    temperature: 0.8,
+    intro: 'Hello! I'm your coding assistant. Ask me anything about programming!'
   });
 
-  // Set a system message
-  chat.setSystemMessage('You are a helpful coding assistant.');
+  // Or set the intro message after initialization
+  chat.setIntro('Hi there! Ready to help with your coding questions!');
 
-  try {
-    // Start a conversation
-    const response1 = await chat.chat('How do I create a React component?');
-    console.log('Assistant:', response1);
-
-    // Continue the conversation
-    const response2 = await chat.chat('How do I add props to it?');
-    console.log('Assistant:', response2);
-
-    // Get conversation history
-    const history = chat.getConversation();
-    console.log('Conversation History:', history);
-  } catch (error) {
-    console.error('Error:', error);
-  }
+  // The intro message will be automatically sent when starting a conversation
+  const response = await chat.chat('How do I create a React component?');
+  console.log('Assistant:', response);
 }
 ```
 
