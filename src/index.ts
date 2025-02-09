@@ -81,4 +81,12 @@ export class DecaChat {
   getConversation(): ChatMessage[] {
     return [...this.conversation];
   }
+
+  /**
+   * Add an initial assistant message to be displayed as an intro
+   * @param message - The intro message to be displayed
+   */
+  intro(message: string): void {
+    this.conversation.push({ role: 'assistant', content: message });
+  }
 }
