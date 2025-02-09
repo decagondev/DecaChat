@@ -39,11 +39,13 @@ export class DecaChat {
     this.temperature = config.temperature || 0.7;
     this.conversation = [];
     
-    if (config.intro) {
-      this.introMessage = config.intro;
-    }
     if (config.systemMessage) {
       this.setSystemMessage(config.systemMessage);
+    }
+
+    if (config.intro) {
+      this.introMessage = config.intro;
+      this.conversation.push({ role: 'assistant', content: config.intro });
     }
   }
 
@@ -69,10 +71,6 @@ export class DecaChat {
    * @returns The assistant's response
    */
   async chat(message: string): Promise<string> {
-    if (this.introMessage && this.conversation.length === 0) {
-      this.conversation.push({ role: 'assistant', content: this.introMessage });
-    }
-
     this.conversation.push({ role: 'user', content: message });
 
     try {
