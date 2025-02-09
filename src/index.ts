@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
 
 export interface DecaChatConfig {
   apiKey: string;
@@ -15,7 +15,7 @@ export interface ChatMessage {
 }
 
 export class DecaChat {
-  private openai: OpenAIApi;
+  private openai: OpenAI;
   private model: string;
   private baseUrl?: string;
   private maxTokens: number;
@@ -23,13 +23,13 @@ export class DecaChat {
   private conversation: ChatMessage[];
   private introMessage?: string;
 
+
   constructor(config: DecaChatConfig) {
-    const configuration = new Configuration({
+    this.openai = new OpenAI({
       apiKey: config.apiKey,
-      basePath: config.baseUrl
+      baseURL: config.baseUrl
     });
 
-    this.openai = new OpenAIApi(configuration);
     this.model = config.model || 'gpt-4o-mini';
     this.baseUrl = config.baseUrl || 'https://api.openai.com/v1';
     this.maxTokens = config.maxTokens || 1000;
@@ -70,14 +70,14 @@ export class DecaChat {
     this.conversation.push({ role: 'user', content: message });
 
     try {
-      const response = await this.openai.createChatCompletion({
+      const response = await this.openai.chat.completions.create({
         model: this.model,
         messages: this.conversation,
         max_tokens: this.maxTokens,
         temperature: this.temperature,
       });
 
-      const reply = response.data.choices[0]?.message?.content || '';
+      const reply = response.choices[0]?.message?.content || '';
       this.conversation.push({ role: 'assistant', content: reply });
       return reply;
     } catch (error) {
