@@ -44,14 +44,14 @@ The `DecaChat` constructor accepts a configuration object with the following opt
 
 ```typescript
 interface DecaChatConfig {
-  apiKey: string;      // Required: Your OpenAI API key
-  model?: string;      // Optional: Default 'gpt-4o-mini'
-  baseUrl?: string;    // Optional: Default 'https://api.openai.com/v1'
-  maxTokens?: number;  // Optional: Default 1000
-  temperature?: number; // Optional: Default 0.7
-  intro?: string;      // Optional: Custom introduction message
+  apiKey: string;         // Required: Your OpenAI API key
+  model?: string;         // Optional: Default 'gpt-4o-mini'
+  baseUrl?: string;       // Optional: Default 'https://api.openai.com/v1'
+  maxTokens?: number;     // Optional: Default 1000
+  temperature?: number;   // Optional: Default 0.7
+  intro?: string;         // Optional: Custom introduction message
   systemMessage?: string; // Optional: Initial system message
-  useBrowser?: boolean;   // Optional: Enable browser usage (when API keys are secured)
+  useBrowser?: boolean;   // Optional: Enable browser usage (Ensure API keys are secured!)
 }
 ```
 
@@ -66,6 +66,7 @@ const chat = new DecaChat(config: DecaChatConfig);
 ### Methods
 
 #### `setSystemMessage(message: string): void`
+
 Sets the system message for the conversation. This resets the conversation history and starts with the new system message.
 
 ```typescript
@@ -73,6 +74,7 @@ chat.setSystemMessage('You are a helpful assistant specialized in JavaScript.');
 ```
 
 #### `setIntro(message: string): void`
+
 Sets a custom introduction message that will be sent to the user when starting a new conversation.
 
 ```typescript
@@ -80,6 +82,7 @@ chat.setIntro('Hi! I'm your AI assistant. How can I help you today?');
 ```
 
 #### `async chat(message: string): Promise<string>`
+
 Sends a message and returns the assistant's response. The message and response are automatically added to the conversation history.
 
 ```typescript
@@ -87,6 +90,7 @@ const response = await chat.chat('What is a closure in JavaScript?');
 ```
 
 #### `clearConversation(): void`
+
 Clears the entire conversation history, including the system message.
 
 ```typescript
@@ -94,6 +98,7 @@ chat.clearConversation();
 ```
 
 #### `getConversation(): ChatMessage[]`
+
 Returns the current conversation history, including system messages, user messages, and assistant responses.
 
 ```typescript
@@ -167,6 +172,7 @@ chat.clearConversation();
 ## Error Handling
 
 The chat method throws errors when:
+
 - The API key is invalid
 - The API request fails
 - Rate limits are exceeded
