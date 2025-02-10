@@ -63,6 +63,7 @@ export class DecaChat {
    */
   setIntro(message: string): void {
     this.introMessage = message;
+    this.conversation.push({ role: 'assistant', content: message });
   }
 
   /**
