@@ -1,5 +1,17 @@
 import OpenAI from 'openai';
 
+/**
+ * Configuration options for initializing a DecaChat instance
+ * @interface
+ * @property {string} apiKey - Any API key compatible with the OpenAI API required for authentication
+ * @property {string} [model] - The AI model to use (defaults to 'gpt-4o-mini')
+ * @property {string} [baseUrl] - Custom API endpoint URL (defaults to 'https://api.openai.com/v1')
+ * @property {number} [maxTokens] - Maximum number of tokens in the response (defaults to 1000)
+ * @property {number} [temperature] - Controls randomness in responses from 0 (deterministic) to 1 (random) (defaults to 0.7)
+ * @property {string} [intro] - Optional initial message from the assistant to start the conversation
+ * @property {string} [systemMessage] - System message to set the behavior of the AI
+ * @property {boolean} [useBrowser] - Whether to allow browser usage (required for browser environments) (Ensure API keys are secured!)
+ */
 export interface DecaChatConfig {
   apiKey: string;
   model?: string;
@@ -25,14 +37,7 @@ export class DecaChat {
   private conversation: ChatMessage[];
   private introMessage?: string;
 
-
   constructor(config: DecaChatConfig) {
-    this.openai = new OpenAI({
-      apiKey: config.apiKey,
-      baseURL: config.baseUrl,
-      dangerouslyAllowBrowser: config.useBrowser
-    });
-
     this.model = config.model || 'gpt-4o-mini';
     this.baseUrl = config.baseUrl || 'https://api.openai.com/v1';
     this.maxTokens = config.maxTokens || 1000;
@@ -47,6 +52,12 @@ export class DecaChat {
       this.introMessage = config.intro;
       this.conversation.push({ role: 'assistant', content: config.intro });
     }
+
+    this.openai = new OpenAI({
+      apiKey: config.apiKey,
+      baseURL: this.baseUrl,
+      dangerouslyAllowBrowser: config.useBrowser
+    });
   }
 
   /**
@@ -102,6 +113,6 @@ export class DecaChat {
    * @returns Array of chat messages
    */
   getConversation(): ChatMessage[] {
-    return [...this.conversation];
+    return structuredClone(this.conversation);
   }
 }
